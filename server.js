@@ -36,6 +36,44 @@ const upload = multer({
 // ==========================================
 
 /**
+ * GET /api/v1/sitemap.xml?siteId=...
+ * Dynamic XML Sitemap generator for SEO & Google Search Console
+ */
+app.get('/api/v1/sitemap.xml', (req, res) => {
+  const query = req.query.siteId || req.query.domain || req.query.id;
+  if (!query) {
+    return res.status(400).send('Missing siteId query parameter');
+  }
+
+  const site = db.getSiteById(query);
+  let domain = 'https://example.com';
+  if (site && site.domain) {
+    domain = site.domain.startsWith('http') ? site.domain : `https://${site.domain}`;
+  }
+
+  const blogs = db.getAllBlogs(query);
+
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+  // Root URL
+  xml += `  <url>\n    <loc>${domain}/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
+  xml += `  <url>\n    <loc>${domain}/blogs</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n`;
+
+  // All Dynamic Blog URLs
+  blogs.forEach(b => {
+    const pubDate = b.publishedAt ? new Date(b.publishedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+    xml += `  <url>\n    <loc>${domain}/blogs/${b.slug}</loc>\n    <lastmod>${pubDate}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  });
+
+  xml += `</urlset>`;
+
+  res.header('Content-Type', 'application/xml');
+  res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+  return res.send(xml);
+});
+
+/**
  * GET /api/v1/config?siteId=... (or ?domain=...)
  * Fetches site config: WhatsApp, GSC verification, etc.
  */

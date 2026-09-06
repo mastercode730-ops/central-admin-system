@@ -130,9 +130,14 @@
             <i data-lucide="globe" class="w-4 h-4 text-blue-400"></i>
             <h2 class="font-heading font-semibold text-white text-base">Select Websites</h2>
           </div>
-          <span id="selectedCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
-            0 Selected
-          </span>
+          <div class="flex items-center gap-2">
+            <span id="selectedCountBadge" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+              0 Selected
+            </span>
+            <button onclick="openAddSiteModal()" title="Add New Website" class="p-1 px-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1 transition-all shadow-md shadow-blue-500/20">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
+            </button>
+          </div>
         </div>
 
         <!-- Search and Category Filters -->
@@ -661,10 +666,10 @@ export function useSiteConfig(siteId = 'matka1') {
         }[site.category] || 'bg-blue-500/10 text-blue-400 border-blue-500/20';
 
         return `
-          <label class="glass-card-hover flex items-center justify-between p-2.5 rounded-xl bg-dark-900/60 border border-white/5 cursor-pointer transition-all ${
+          <div class="glass-card-hover flex items-center justify-between p-2.5 rounded-xl bg-dark-900/60 border border-white/5 transition-all ${
             isChecked ? 'border-blue-500/40 bg-blue-950/20' : ''
           }">
-            <div class="flex items-center gap-2.5 min-w-0">
+            <label class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer">
               <input type="checkbox" onchange="toggleSiteSelection('${site.id}')" ${isChecked ? 'checked' : ''}
                 class="w-4 h-4 rounded text-blue-600 bg-dark-900 border-white/20 focus:ring-0 cursor-pointer">
               <div class="min-w-0">
@@ -674,14 +679,22 @@ export function useSiteConfig(siteId = 'matka1') {
                 </div>
                 <div class="text-[11px] text-slate-400 font-mono truncate">${site.domain}</div>
               </div>
+            </label>
+            <div class="text-right flex items-center gap-1.5 shrink-0 ml-2">
+              <div class="flex flex-col items-end gap-1">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${categoryBadge}">
+                  ${site.category}
+                </span>
+                <span class="text-[10px] text-slate-500 font-mono">${site.whatsappNumber ? '📱 ' + site.whatsappNumber.slice(-4) : 'No WA'}</span>
+              </div>
+              <a href="/api/v1/sitemap.xml?siteId=${site.id}" target="_blank" title="View XML Sitemap" class="p-1 rounded bg-white/5 hover:bg-white/10 text-slate-400 hover:text-cyan-400 transition-colors">
+                <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+              </a>
+              <button onclick="deleteSite('${site.id}', '${site.name}')" title="Delete Website" class="p-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 transition-colors">
+                <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+              </button>
             </div>
-            <div class="text-right flex flex-col items-end gap-1">
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold border ${categoryBadge}">
-                ${site.category}
-              </span>
-              <span class="text-[10px] text-slate-500 font-mono">${site.whatsappNumber ? '📱 ' + site.whatsappNumber.slice(-4) : 'No WA'}</span>
-            </div>
-          </label>
+          </div>
         `;
       }).join('');
       lucide.createIcons();
@@ -1002,11 +1015,161 @@ export function useSiteConfig(siteId = 'matka1') {
       });
     }
 
+    async function deleteSite(id, name) {
+      if (!confirm(`Are you sure you want to remove "${name}" (${id}) from the network?`)) return;
+      try {
+        const res = await fetch(`/api/v1/admin/sites/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Website "${name}" removed`, 'success');
+          selectedSiteIds.delete(id);
+          loadSites();
+        } else {
+          showToast(data.error || 'Failed to delete site', 'error');
+        }
+      } catch (err) {
+        showToast('Network error deleting site', 'error');
+      }
+    }
+
+    function openAddSiteModal() {
+      document.getElementById('addSiteModal').classList.remove('hidden');
+      document.getElementById('newSiteName').focus();
+    }
+
+    function closeAddSiteModal() {
+      document.getElementById('addSiteModal').classList.add('hidden');
+    }
+
+    function onNewSiteNameChange() {
+      const name = document.getElementById('newSiteName').value;
+      const autoId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      if (!document.getElementById('newSiteId').dataset.manual) {
+        document.getElementById('newSiteId').value = autoId;
+      }
+    }
+
+    async function executeCreateSite() {
+      const name = document.getElementById('newSiteName').value.trim();
+      const id = document.getElementById('newSiteId').value.trim();
+      const domain = document.getElementById('newSiteDomain').value.trim();
+      const category = document.getElementById('newSiteCategory').value;
+      const whatsappNumber = document.getElementById('newSiteWa').value.trim();
+      const whatsappMessage = document.getElementById('newSiteWaMsg').value.trim();
+      const gscCode = document.getElementById('newSiteGsc').value.trim();
+
+      if (!name || !id || !domain) {
+        showToast('Website Name, Site ID, and Domain are required', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/v1/admin/sites', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id,
+            name,
+            domain,
+            category,
+            whatsappNumber,
+            whatsappMessage,
+            gscCode
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Website "${name}" added successfully!`, 'success');
+          closeAddSiteModal();
+          // Reset form
+          document.getElementById('newSiteName').value = '';
+          document.getElementById('newSiteId').value = '';
+          document.getElementById('newSiteDomain').value = '';
+          loadSites();
+        } else {
+          showToast(data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Failed to add website', 'error');
+      }
+    }
+
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       loadSites();
     });
   </script>
+
+  <!-- Add Website Modal -->
+  <div id="addSiteModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl w-full max-w-md p-6 border border-white/20 shadow-2xl relative">
+      <button onclick="closeAddSiteModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-bold text-white text-base">Add New Website</h3>
+          <p class="text-[11px] text-slate-400">Add another domain to your central control hub.</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Website Name</label>
+          <input type="text" id="newSiteName" oninput="onNewSiteNameChange()" placeholder="e.g. Mahadev Book VIP"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Site ID (Unique Key)</label>
+            <input type="text" id="newSiteId" oninput="this.dataset.manual = true" placeholder="e.g. mahadev-vip"
+              class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 font-mono text-slate-200 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Category</label>
+            <select id="newSiteCategory" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+              <option value="Cricket">Cricket</option>
+              <option value="Betting ID">Betting ID</option>
+              <option value="Matka">Matka</option>
+              <option value="Satta">Satta</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Domain Name</label>
+          <input type="text" id="newSiteDomain" placeholder="e.g. mahadevbookvip.com"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 font-mono text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Initial WhatsApp Number (Optional)</label>
+          <input type="text" id="newSiteWa" placeholder="918360750829" value="918360750829"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 font-mono text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Google Search Console Tag (Optional)</label>
+          <input type="text" id="newSiteGsc" placeholder="Verification token"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-3 py-2 font-mono text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <input type="hidden" id="newSiteWaMsg" value="Hello, I want details">
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button onclick="closeAddSiteModal()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-medium">Cancel</button>
+          <button onclick="executeCreateSite()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center gap-1.5 shadow-lg shadow-blue-500/25">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add Website
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
