@@ -1,26 +1,31 @@
 /**
  * Central Multi-Site Universal Plug & Play Client SDK
  * ---------------------------------------------------
- * Add this 1 line to any website's <head> or <body>:
- * <script src="http://localhost:5000/client.js" data-site-id="YOUR_SITE_ID" async></script>
+ * Automatically intercepts all WhatsApp redirections and Google Search Console tags.
  */
 
 (function () {
-  // 1. Identify Site ID and API Host
+  // 1. Identify Site ID, Hostname, and API Host
   const currentScript = document.currentScript || document.querySelector('script[src*="client.js"]');
-  const apiHost = currentScript ? new URL(currentScript.src).origin : 'http://localhost:5000';
-  const siteId = (currentScript && currentScript.getAttribute('data-site-id')) || window.location.hostname.replace('www.', '');
+  const apiHost = currentScript ? new URL(currentScript.src).origin : 'https://central-admin-system.onrender.com';
+  const siteId = (currentScript && currentScript.getAttribute('data-site-id')) || window.location.hostname.replace(/^www\./, '');
+  const currentHostname = window.location.hostname.replace(/^www\./, '');
 
-  if (!siteId) {
-    console.warn('[SiteConfig] No data-site-id provided and hostname undetermined.');
+  if (!siteId && !currentHostname) {
+    console.warn('[SiteConfig] No site identifier found.');
     return;
   }
 
-  // 2. Fetch Central Config
-  fetch(`${apiHost}/api/v1/config?siteId=${encodeURIComponent(siteId)}`)
+  // 2. Fetch Central Config (Try siteId first, fallback to hostname)
+  const fetchUrl = `${apiHost}/api/v1/config?siteId=${encodeURIComponent(siteId)}&domain=${encodeURIComponent(currentHostname)}`;
+
+  fetch(fetchUrl)
     .then((res) => res.json())
     .then((data) => {
-      if (!data.success) return;
+      if (!data.success) {
+        console.warn('[SiteConfig] Config not found for', siteId, data);
+        return;
+      }
 
       // Expose globally
       window.__SITE_CONFIG__ = data;
@@ -38,10 +43,12 @@
 
       // B. Update WhatsApp Links across the page
       if (data.whatsappUrl) {
+        const newWaUrl = data.whatsappUrl;
+
         function updateWhatsAppLinks() {
           const links = document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"], a[data-wa="true"], .whatsapp-link');
           links.forEach((a) => {
-            a.href = data.whatsappUrl;
+            a.href = newWaUrl;
           });
 
           // Also update visible number text in elements marked with [data-wa-number]
@@ -64,13 +71,35 @@
           updateWhatsAppLinks();
         });
 
-        observer.observe(document.body || document.documentElement, {
-          childList: true,
-          subtree: true
-        });
+        if (document.body) {
+          observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+          document.addEventListener('DOMContentLoaded', () => {
+            observer.observe(document.body, { childList: true, subtree: true });
+          });
+        }
+
+        // Global Click Interceptor (Catches React synthetic clicks, delayed renders, or inline handlers)
+        document.addEventListener('click', function (e) {
+          const targetLink = e.target.closest('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"], [data-wa="true"]');
+          if (targetLink) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(newWaUrl, targetLink.target || '_blank');
+          }
+        }, true);
+
+        // Window.open Interceptor for JS-based redirects
+        const originalWindowOpen = window.open;
+        window.open = function (url, target, features) {
+          if (typeof url === 'string' && (url.includes('wa.me') || url.includes('whatsapp.com') || url.includes('api.whatsapp.com'))) {
+            return originalWindowOpen.call(window, newWaUrl, target, features);
+          }
+          return originalWindowOpen.apply(window, arguments);
+        };
       }
 
-      // Trigger custom event in case custom React components want to listen
+      // Trigger custom event
       window.dispatchEvent(new CustomEvent('siteConfigLoaded', { detail: data }));
     })
     .catch((err) => {

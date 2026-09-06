@@ -202,8 +202,23 @@ class Database {
 
   getSiteById(idOrDomain) {
     if (!idOrDomain) return null;
-    const query = idOrDomain.toLowerCase().trim();
-    return this.sites.find(s => s.id.toLowerCase() === query || s.domain.toLowerCase() === query) || null;
+    const clean = idOrDomain.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '').trim();
+    
+    // 1. Exact match by id or cleaned domain
+    const exact = this.sites.find(s => {
+      const sId = (s.id || '').toLowerCase().trim();
+      const sDomain = (s.domain || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '').trim();
+      return sId === clean || sDomain === clean;
+    });
+    if (exact) return exact;
+
+    // 2. Fuzzy match (e.g. matka1 <-> matka-satta-online <-> matkasatta.online)
+    return this.sites.find(s => {
+      const sId = (s.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sDomain = (s.domain || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/[^a-z0-9]/g, '');
+      const cleanRaw = clean.replace(/[^a-z0-9]/g, '');
+      return sId === cleanRaw || sDomain === cleanRaw || sDomain.includes(cleanRaw) || cleanRaw.includes(sDomain);
+    }) || null;
   }
 
   createSite(siteData) {
