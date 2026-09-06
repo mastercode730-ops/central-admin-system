@@ -6,17 +6,97 @@
     "category": "Matka",
     "whatsappNumber": "918360750829",
     "whatsappMessage": "Hello, I want today Matka Lucky Number",
+    "gscCode": "RLxU_35ZVU-kd97IrKNiA2dqe9TaozcOmgYRyQgUfoU",
+    "status": "active"
+  },
+  {
+    "id": "matka2",
+    "name": "Matka 2 - UP Bazar",
+    "domain": "matka2.com",
+    "category": "Matka",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want UP Bazar Matka result",
+    "gscCode": "Zl2DPvv_v8aP3NAav29kfDawTtH_qJFrdrlA_BScC6o",
+    "status": "active"
+  },
+  {
+    "id": "matka3",
+    "name": "Matka 3 Guru",
+    "domain": "matka3.com",
+    "category": "Matka",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Matka 3 Guru updates",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "matka4",
+    "name": "Matka 4 Fast",
+    "domain": "matka4.com",
+    "category": "Matka",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Matka 4 fast results",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "matka5",
+    "name": "Matka 5 Star",
+    "domain": "matka5.com",
+    "category": "Matka",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Matka 5 Star chart",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "betting-king-frontend",
+    "name": "Satta King Fast v1",
+    "domain": "sattaking-v1.com",
+    "category": "Satta",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Satta King v1 leak result",
     "gscCode": "h7DLR-IdzczbPHAB1C7vZ0YYQBJJ-xuW6UwKw7WEfwM",
     "status": "active"
   },
   {
-    "id": "betting-king",
-    "name": "Satta King Fast Result",
-    "domain": "sattaking.com",
+    "id": "betting-king-frontend_v2",
+    "name": "Satta King Fast v2",
+    "domain": "sattaking-v2.com",
     "category": "Satta",
     "whatsappNumber": "918360750829",
-    "whatsappMessage": "Hello, I want Satta King leak result",
-    "gscCode": "h7DLR-IdzczbPHAB1C7vZ0YYQBJJ-xuW6UwKw7WEfwM",
+    "whatsappMessage": "Hello, I want Satta King v2 leak result",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "betting-king-frontend_v3",
+    "name": "Satta King Fast v3",
+    "domain": "sattaking-v3.com",
+    "category": "Satta",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Satta King v3 leak result",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "betting-king-frontend_v4",
+    "name": "Satta King Fast v4",
+    "domain": "sattaking-v4.com",
+    "category": "Satta",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Satta King v4 leak result",
+    "gscCode": "",
+    "status": "active"
+  },
+  {
+    "id": "betting-king-frontend_v5",
+    "name": "Satta King Fast v5",
+    "domain": "sattaking-v5.com",
+    "category": "Satta",
+    "whatsappNumber": "918360750829",
+    "whatsappMessage": "Hello, I want Satta King v5 leak result",
+    "gscCode": "",
     "status": "active"
   },
   {
