@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Integration Hub | Central Admin System</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            dark: {
+              950: '#040711',
+              900: '#090f1d',
+              800: '#0f1a30',
+              700: '#172545',
+              600: '#233863',
+            },
+            accent: {
+              cyan: '#06b6d4',
+              blue: '#3b82f6',
+              emerald: '#10b981',
+              purple: '#8b5cf6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #050814;
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(15, 26, 48, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.2);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .code-block {
+      background: #02040a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-white/10 bg-dark-950/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <i data-lucide="layers" class="w-5 h-5 text-white"></i>
+          </div>
+          <span class="font-heading font-bold text-lg text-white">Central Admin System</span>
+        </a>
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          Developer Integration Hub
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="/" class="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition-all">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-cyan-400"></i> Open Admin Portal
+        </a>
+        <a href="https://github.com/mastercode730-ops/central-admin-system" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg shadow-blue-500/20 transition-all">
+          <i data-lucide="github" class="w-4 h-4"></i> GitHub Repo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-400 mb-4">
+      <i data-lucide="zap" class="w-3.5 h-3.5"></i> 2-Minute Zero-Friction Setup
+    </div>
+    <h1 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight max-w-4xl mx-auto leading-tight">
+      How to Connect Any Website to the <span class="gradient-text">Central Control Hub</span>
+    </h1>
+    <p class="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto mt-4">
+      Follow this simple 2-step guide to connect your React, Next.js, or HTML websites so that WhatsApp numbers, Google Search Console codes, and Blogs can be managed centrally without future code redeployments.
+    </p>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-12 flex-1 w-full">
+
+    <!-- 3-STEP ARCHITECTURE CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Step 1 Card -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-heading font-bold text-lg mb-4">
+            1
+          </div>
+          <h3 class="font-heading font-bold text-white text-base mb-1">Register on Central Portal</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Open the admin portal, click <b>+ Add</b>, and enter your Website Name and Domain. This generates your unique <b>Site ID</b>.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-white/5 text-[11px] text-blue-400 font-mono">
+          Portal: central-admin-system.onrender.com
+        </div>
+      </div>
+
+      <!-- Step 2 Card -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-heading font-bold text-lg mb-4">
+            2
+          </div>
+          <h3 class="font-heading font-bold text-white text-base mb-1">Add 1 Line to Website Code</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Paste the lightweight <code>client.js</code> script tag into your website's <code>index.html</code> or <code>layout.js</code> with your <code>data-site-id</code>.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-white/5 text-[11px] text-emerald-400 font-mono">
+          &lt;script src=".../client.js" data-site-id="..."&gt;
+        </div>
+      </div>
+
+      <!-- Step 3 Card -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl pointer-events-none"></div>
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-heading font-bold text-lg mb-4">
+            3
+          </div>
+          <h3 class="font-heading font-bold text-white text-base mb-1">Done! Zero Redeployment</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            WhatsApp numbers and GSC tags will now update in real-time on the live site whenever changed in the Admin Portal.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-white/5 text-[11px] text-purple-400 font-mono">
+          ⚡ Real-time synchronization
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INTERACTIVE CODE GENERATOR -->
+    <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+        <div>
+          <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400"></i>
+            Interactive Snippet Generator
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Enter your site details to generate the exact integration code for your stack.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-400 font-medium">Select Framework:</span>
+          <select id="frameworkSelector" onchange="generateSnippet()"
+            class="bg-dark-900 border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:outline-none focus:border-cyan-500">
+            <option value="react">React / Vite (index.html)</option>
+            <option value="nextjs-app">Next.js 13/14/15/16 App Router (layout.js)</option>
+            <option value="nextjs-pages">Next.js Pages Router (_document.js)</option>
+            <option value="html">Plain HTML / PHP</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Generator Inputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Domain Name</label>
+          <input type="text" id="genDomain" oninput="onDomainInput()" value="mahadevsports.com" placeholder="e.g. mahadevsports.com"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Site ID (Used in Admin Portal)</label>
+          <input type="text" id="genSiteId" oninput="generateSnippet()" value="mahadevsports" placeholder="e.g. mahadevsports"
+            class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-mono text-cyan-400 placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+        </div>
+      </div>
+
+      <!-- Generated Code Output -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <span id="genFileLocation" class="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> Place in: <b>index.html (inside &lt;head&gt;)</b>
+          </span>
+          <button onclick="copyGeneratedCode()" class="px-3 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 text-xs font-semibold flex items-center gap-1.5 transition-all">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Snippet
+          </button>
+        </div>
+        <pre id="generatedSnippetCode" class="code-block rounded-2xl p-5 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed shadow-inner"></pre>
+      </div>
+    </div>
+
+    <!-- FRAMEWORK GUIDES -->
+    <div class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+        </div>
+        <h2 class="font-heading font-bold text-xl text-white">Framework Integration Examples</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- React / Vite Guide -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+            <h3 class="font-heading font-bold text-white text-sm flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> React / Vite Projects
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">index.html</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Open the root <code>index.html</code> of your React/Vite project and paste this script tag inside the <code>&lt;head&gt;</code> tag:
+          </p>
+          <pre class="code-block rounded-xl p-3.5 text-xs font-mono text-slate-300 overflow-x-auto">&lt;!doctype html&gt;
+&lt;html lang="hi"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;My Site Title&lt;/title&gt;
+    &lt;!-- Central Admin Control Script --&gt;
+    &lt;script src="https://central-admin-system.onrender.com/client.js" data-site-id="YOUR_SITE_ID" async&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt;
+    &lt;script type="module" src="/src/main.jsx"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+
+        <!-- Next.js App Router Guide -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+            <h3 class="font-heading font-bold text-white text-sm flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-white"></span> Next.js (App Router 13/14/15/16)
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">app/layout.js</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Open <code>app/layout.js</code> (or <code>layout.tsx</code>) and add the script tag inside the <code>&lt;head&gt;</code> element of your <code>RootLayout</code>:
+          </p>
+          <pre class="code-block rounded-xl p-3.5 text-xs font-mono text-slate-300 overflow-x-auto">export default function RootLayout({ children }) {
+  return (
+    &lt;html lang="en"&gt;
+      &lt;head&gt;
+        &lt;script src="https://central-admin-system.onrender.com/client.js" data-site-id="YOUR_SITE_ID" async /&gt;
+      &lt;/head&gt;
+      &lt;body&gt;{children}&lt;/body&gt;
+    &lt;/html&gt;
+  );
+}</pre>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BLOG WIDGET & SITEMAP EXPLANATION -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Dynamic Blog Widget -->
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex items-center gap-2.5 pb-3 border-b border-white/10">
+          <i data-lucide="newspaper" class="w-5 h-5 text-purple-400"></i>
+          <h3 class="font-heading font-bold text-white text-sm">How to Add the Dynamic Blog Page</h3>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          If your website has a Blog page (e.g., <code>/blogs</code> or <code>/blog.html</code>), you can render all articles uploaded from Word documents automatically using our widget:
+        </p>
+        <pre class="code-block rounded-xl p-3.5 text-xs font-mono text-purple-300 overflow-x-auto">&lt;!-- Drop this in any page to show blogs --&gt;
+&lt;div id="central-blog-container"&gt;&lt;/div&gt;
+&lt;script src="https://central-admin-system.onrender.com/blog-widget.js" data-site-id="YOUR_SITE_ID" async&gt;&lt;/script&gt;</pre>
+      </div>
+
+      <!-- Live XML Sitemap -->
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex items-center gap-2.5 pb-3 border-b border-white/10">
+          <i data-lucide="file-code" class="w-5 h-5 text-emerald-400"></i>
+          <h3 class="font-heading font-bold text-white text-sm">Dynamic Google XML Sitemap</h3>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          The central system automatically maintains a live Google-compliant XML sitemap for every website. You can submit this directly to Google Search Console:
+        </p>
+        <div class="code-block rounded-xl p-3.5 text-xs font-mono text-emerald-300 break-all">
+          https://central-admin-system.onrender.com/api/v1/sitemap.xml?siteId=YOUR_SITE_ID
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LIVE INTEGRATION TESTER / VALIDATOR -->
+    <div class="glass-card rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 border border-blue-500/20">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+          <i data-lucide="check-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-heading font-bold text-white text-lg">Live Integration Verifier</h3>
+          <p class="text-xs text-slate-400">Test if a website is properly registered in the central system.</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input type="text" id="verifySiteInput" placeholder="Enter Site ID or Domain (e.g. matka1, mahadevsports.com)"
+          class="flex-1 bg-dark-950 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+        <button onclick="runVerification()" id="btnVerify"
+          class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 transition-all shrink-0">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i> Verify Integration
+        </button>
+      </div>
+
+      <div id="verifyResultContainer" class="hidden mt-4 pt-4 border-t border-white/10"></div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-6 text-center text-xs text-slate-500 font-mono">
+    Central Admin System • Multi-Site Network Documentation • 2026
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold shadow-2xl flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <span id="toastMsg">Copied!</span>
+  </div>
+
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('translate-y-10', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+      }, 2500);
+    }
+
+    function onDomainInput() {
+      const domain = document.getElementById('genDomain').value.trim();
+      const autoId = domain.replace(/^https?:\/\//, '').replace(/^www\./, '').split('.')[0] || 'mysite';
+      document.getElementById('genSiteId').value = autoId;
+      generateSnippet();
+    }
+
+    function generateSnippet() {
+      const framework = document.getElementById('frameworkSelector').value;
+      const siteId = document.getElementById('genSiteId').value.trim() || 'YOUR_SITE_ID';
+      const output = document.getElementById('generatedSnippetCode');
+      const locationLabel = document.getElementById('genFileLocation');
+
+      if (framework === 'react' || framework === 'html') {
+        locationLabel.innerHTML = `<i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> Place in: <b>index.html (inside &lt;head&gt;)</b>`;
+        output.textContent = `<script src="https://central-admin-system.onrender.com/client.js" data-site-id="${siteId}" async><\/script>`;
+      } else if (framework === 'nextjs-app') {
+        locationLabel.innerHTML = `<i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> Place in: <b>app/layout.js (inside &lt;head&gt;)</b>`;
+        output.textContent = `// app/layout.js\nexport default function RootLayout({ children }) {\n  return (\n    <html lang="en">\n      <head>\n        <script src="https://central-admin-system.onrender.com/client.js" data-site-id="${siteId}" async />\n      </head>\n      <body>{children}</body>\n    </html>\n  );\n}`;
+      } else if (framework === 'nextjs-pages') {
+        locationLabel.innerHTML = `<i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> Place in: <b>pages/_document.js (inside &lt;Head&gt;)</b>`;
+        output.textContent = `// pages/_document.js\nimport { Html, Head, Main, NextScript } from 'next/document';\n\nexport default function Document() {\n  return (\n    <Html>\n      <Head>\n        <script src="https://central-admin-system.onrender.com/client.js" data-site-id="${siteId}" async />\n      </Head>\n      <body>\n        <Main />\n        <NextScript />\n      </body>\n    </Html>\n  );\n}`;
+      }
+      lucide.createIcons();
+    }
+
+    function copyGeneratedCode() {
+      const code = document.getElementById('generatedSnippetCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Code copied to clipboard!');
+      });
+    }
+
+    async function runVerification() {
+      const query = document.getElementById('verifySiteInput').value.trim();
+      const container = document.getElementById('verifyResultContainer');
+      const btn = document.getElementById('btnVerify');
+
+      if (!query) {
+        alert('Please enter a Site ID or domain name.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<div class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Checking...`;
+
+      try {
+        const res = await fetch(`https://central-admin-system.onrender.com/api/v1/config?siteId=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        container.classList.remove('hidden');
+        if (data.success) {
+          container.innerHTML = `
+            <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-2">
+              <div class="flex items-center gap-2 font-bold text-emerald-400 text-sm">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Site is Successfully Connected!
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono pt-2">
+                <div><b>Site Name:</b> ${data.name}</div>
+                <div><b>Domain:</b> ${data.domain}</div>
+                <div><b>Site ID:</b> ${data.siteId}</div>
+                <div><b>Active WhatsApp:</b> ${data.whatsappNumber || 'None'}</div>
+                <div><b>GSC Code:</b> ${data.gscCode ? 'Configured ✅' : 'Not set'}</div>
+                <div><b>Status:</b> <span class="text-emerald-400 uppercase font-bold">${data.status}</span></div>
+              </div>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs space-y-2">
+              <div class="flex items-center gap-2 font-bold text-rose-400 text-sm">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i> Site Not Found in Central System
+              </div>
+              <p class="text-slate-400">
+                "${query}" has not been registered in the Central Admin Dashboard yet. Please open the admin portal, click <b>+ Add</b>, and create it.
+              </p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        container.classList.remove('hidden');
+        container.innerHTML = `
+          <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-400">
+            Network error verifying site. Please check connection.
+          </div>
+        `;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i> Verify Integration`;
+        lucide.createIcons();
+      }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      generateSnippet();
+    });
+  </script>
+</body>
+</html>
